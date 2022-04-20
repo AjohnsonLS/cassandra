@@ -32,6 +32,14 @@ import (
 	"go.opencensus.io/plugin/ochttp/propagation/b3"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/trace"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
+	grpcotel "go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
+	"go.opentelemetry.io/otel/sdk/resource"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
+	"go.opentelemetry.io/otel/trace"
 	"google.golang.org/grpc"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -144,6 +152,7 @@ func main() {
 	mustConnGRPC(ctx, &svc.adSvcConn, svc.adSvcAddr)
 
 	r := mux.NewRouter()
+	r.Use(otelmux.Middleware("frontend"))
 	r.Path("/").Handler(promhttp.InstrumentHandlerCounter(requestCount, http.HandlerFunc(svc.homeHandler))).Methods(http.MethodGet, http.MethodHead)
 	r.HandleFunc("/product/{id}", svc.productHandler).Methods(http.MethodGet, http.MethodHead)
 	r.HandleFunc("/cart", svc.viewCartHandler).Methods(http.MethodGet, http.MethodHead)
@@ -189,6 +198,38 @@ func initJaegerTracing(log logrus.FieldLogger) {
 	}
 	trace.RegisterExporter(exporter)
 	log.Info("jaeger initialization completed.")
+}
+
+func initLSTracer(log logrus.FieldLogger) {
+	var tracer := trace.Tracer("mux server")
+
+	ls_access_token :=os.LookupEnv("LS_ACCESS_TOKEN")
+
+	//OTLP trace exporter
+	exporter, err := otlptrace.New(ctx, otlptracegrpc.NewClient(
+		otlptracegrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, "")),
+		otlptracegrpc.WithEndpoint("ingest.lightstep.com:443"),
+		otlptracegrpc.WithHeaders(map[string]string{"lightstep-access-token":ls_access_token}),
+		otlptracegrpc.WithCompressor(gzip.Name),),
+	)
+	resource := resource.NewWithAttributes(
+	semconv.SchemaURL,
+	semconv.ServiceNameKey.String("frontEnd"),
+	semconv.ServiceVersionKey.String("1.0.0"),
+	)
+
+	// Define TracerProvider
+	tracerProvider := sdktrace.NewTracerProvider(
+		sdktrace.WithSampler(sdktrace.AlwaysSample()),
+		sdktrace.WithBatcher(exporter),
+		sdktrace.WithResource(newResource()),
+	)
+
+	// Set TracerProvider
+	otel.SetTracerProvider(tracerProvider)
+
+	//Set Propagation headers
+	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 }
 
 func initStats(log logrus.FieldLogger, exporter *stackdriver.Exporter) {
@@ -239,8 +280,10 @@ func initTracing(log logrus.FieldLogger) {
 	// trace.ProbabilitySampler set at the desired probability.
 	trace.ApplyConfig(trace.Config{DefaultSampler: trace.AlwaysSample()})
 
-	initJaegerTracing(log)
+	// initJaegerTracing(log)
+	initLSTracer(log)
 	// initStackdriverTracing(log)
+
 
 }
 
