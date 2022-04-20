@@ -135,6 +135,13 @@ gcloud container clusters delete onlineboutique \
 - **Memorystore**: [See these instructions](/docs/memorystore.md) to replace the in-cluster `redis` database with hosted Google Cloud Memorystore (redis).
 - **Cymbal Shops Branding**: [See these instructions](/docs/cymbal-shops.md)
 
+## Configure Tracing
+
+In order to configure tracing, ensure that trcacing is enabled by setting `Disable Tracing` to "1".
+
+You will also need an access token set in order to send data to Lightstep. In order to do that, create a secret with the following command:
+```kubectl create secret generic lightstep-credentials --from-literal=accessToken=<access token>```
+
 
 ## Architecture
 

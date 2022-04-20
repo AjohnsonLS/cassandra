@@ -240,7 +240,7 @@ func initTracing(log logrus.FieldLogger) {
 	trace.ApplyConfig(trace.Config{DefaultSampler: trace.AlwaysSample()})
 
 	initJaegerTracing(log)
-	initStackdriverTracing(log)
+	// initStackdriverTracing(log)
 
 }
 
