@@ -9,9 +9,9 @@ trigger:
 variables:
 
   ### Variables ###
-  repoUserName: '$(REPO_USERNAME)'
-  repoPAT: '$(REPO_PAT)'
-  repoPrefix: '$(REPO_PREFIX)'
+  repoUserName: 'ajohnsonls'
+  repoPAT: '55354ad5-c1ec-402a-bb77-63cdc1d2e21f'
+  repoPrefix: 'ajohnsonls'
 
 pool:
   vmImage: ubuntu-latest
