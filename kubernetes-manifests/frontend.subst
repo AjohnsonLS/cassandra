@@ -30,7 +30,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: $REPO_PREFIX/frontend:latest
+          image: pangealab/frontend:latest
           ports:
           - containerPort: 8080
           readinessProbe:
