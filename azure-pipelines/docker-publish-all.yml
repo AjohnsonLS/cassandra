@@ -13,8 +13,7 @@ variables:
   repoPAT: '$(REPOPAT)'
   repoPrefix: '$(REPOPREFIX)'
 
-pool:
-  vmImage: ubuntu-latest
+pool: Default
 
 stages:
 
