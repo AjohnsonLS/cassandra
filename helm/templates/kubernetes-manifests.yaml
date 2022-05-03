@@ -233,7 +233,7 @@ spec:
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: "http://otelcollector:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
-        #   value: "service.name=recommendationservice,service.version=1.0.0"        
+          value: "service.name=recommendationservice,service.version=1.0.0"        
         resources:
           requests:
             cpu: 100m
@@ -383,7 +383,7 @@ spec:
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: "http://otelcollector:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
-        #   value: "service.name=paymentservice,service.version=1.0.0"                
+          value: "service.name=paymentservice,service.version=1.0.0"                
         readinessProbe:
           exec:
             command: ["/bin/grpc_health_probe", "-addr=:50051"]
@@ -438,7 +438,7 @@ spec:
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: "http://otelcollector:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
-        #   value: "service.name=productcatalogservice,service.version=1.0.0"        
+          value: "service.name=productcatalogservice,service.version=1.0.0"        
         readinessProbe:
           exec:
             command: ["/bin/grpc_health_probe", "-addr=:3550"]
@@ -490,10 +490,10 @@ spec:
         - name: REDIS_ADDR
           value: "redis-cart:6379"
         # Lightstep Instrumentation
-        # - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        #   value: "http://otelcollector:4317"
-        # - name: OTEL_RESOURCE_ATTRIBUTES
-        #   value: "service.name=cartservice,service.version=1.0.0"               
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://otelcollector:4317"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=cartservice,service.version=1.0.0"               
         resources:
           requests:
             cpu: 200m
@@ -603,7 +603,7 @@ spec:
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: "http://otelcollector:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
-        #   value: "service.name=currencyservice,service.version=1.0.0"         
+          value: "service.name=currencyservice,service.version=1.0.0"         
         readinessProbe:
           exec:
             command: ["/bin/grpc_health_probe", "-addr=:7000"]
@@ -657,7 +657,7 @@ spec:
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: "http://otelcollector:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
-        #   value: "service.name=shippingservice,service.version=1.0.0"         
+          value: "service.name=shippingservice,service.version=1.0.0"         
         readinessProbe:
           periodSeconds: 5
           exec:
@@ -766,7 +766,7 @@ spec:
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: "http://otelcollector:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
-        #   value: "service.name=adservice,service.version=1.0.0"
+          value: "service.name=adservice,service.version=1.0.0"
         resources:
           requests:
             cpu: 400m
