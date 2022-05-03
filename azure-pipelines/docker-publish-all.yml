@@ -13,8 +13,8 @@ variables:
   repoPAT: '$(REPOPAT)'
   repoPrefix: '$(REPOPREFIX)'
 
-pool: Default
-
+pool:
+  vmImage: ubuntu-latest # This is the default if you don't specify a pool or vmImage.
 stages:
 
   #### Build Image Stage ####
