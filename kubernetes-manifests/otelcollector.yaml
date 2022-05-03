@@ -29,6 +29,7 @@ spec:
         - containerPort: 13133
         - containerPort: 4317
         - containerPort: 55670           
+        - containerPort: 55688
         env:
         # - name: KEY
         #   value: VALUE
@@ -72,3 +73,6 @@ spec:
   - name: "55670"
     port: 55670
     targetPort: 55670
+  - name: "55688"
+    port: 55688
+    targetPort: 55688
