@@ -9,12 +9,13 @@ trigger:
 variables:
 
   ### Variables ###
-  repoUserName: '$(REPOUSERNAME)'
-  repoPAT: '$(REPOPAT)'
-  repoPrefix: '$(REPOPREFIX)'
+  repoUserName: '$(REPO_USERNAME)'
+  repoPAT: '$(REPO_PAT)'
+  repoPrefix: '$(REPO_PREFIX)'
 
 pool:
-  vmImage: ubuntu-latest # This is the default if you don't specify a pool or vmImage.
+  vmImage: ubuntu-latest
+
 stages:
 
   #### Build Image Stage ####
@@ -25,9 +26,9 @@ stages:
         - bash: |
             set -x # Echo Commands
             # Docker Login
-            echo 55354ad5-c1ec-402a-bb77-63cdc1d2e21f | docker login --username ajohnsonls --password-stdin
+            echo $(repoPAT) | docker login --username $(repoUserName) --password-stdin
             # Change Dir
             cd hack/            
             # Build All Images
-            REPO_PREFIX=ajohnsonls TAG=latest ./make-docker-images.sh
+            REPO_PREFIX=$(repoPrefix) TAG=latest ./make-docker-images.sh
           displayName: 'Building All Images'
